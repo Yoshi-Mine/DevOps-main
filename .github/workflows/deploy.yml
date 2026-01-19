@@ -14,8 +14,8 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}    
     - name: Build and Push
       run: |
-        docker build -t sinisana/quiz-backend:latest ./Backend
-        docker push sinisana/quiz-backend:latest
+        docker build -t sanasini/quiz-backend:latest ./Backend
+        docker push sanasini/quiz-backend:latest
     - name: Set Kubernetes Context
       uses: azure/k8s-set-context@v1
       with:
