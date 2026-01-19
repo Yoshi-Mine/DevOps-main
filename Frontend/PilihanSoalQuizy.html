@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizy - Simulasi Soal soal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Quizy</a>
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Quizy.html">Halaman Utama</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Soal - Soal</a>
+                    </li>
+                </ul>
+            </div>
+
+            <button class="btn btn-login ms-lg-3">Login</button>
+        </div>
+    </nav>
+
+    <div class="bg-pattern">
+        <div class="form-box">
+            <div class="icon-circle">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <h4>Soal - Soal</h4>
+            <p>Pilih jenjang dan mata pelajaran untuk memulai simulasi</p>
+
+            <form>
+                <div class="text-start mb-3">
+                    <label>Jenjang Pendidikan:</label>
+                    <select class="form-select">
+                        <option>SMA/MA/SMK/MAK/Sederajat</option>
+                    </select>
+                </div>
+
+                <div class="text-start mb-3">
+                    <label>Jenis Mata Pelajaran:</label>
+                    <select class="form-select">
+                        <option>Mata Pelajaran Wajib</option>
+                    </select>
+                </div>
+
+                <div class="text-start mb-4">
+                    <label>Mata Pelajaran:</label>
+                    <select class="form-select">
+                        <option>Matematika</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn-simulasi"
+                    onclick="window.location.href='Soal/start-page/round-1-start.html'">
+                    <i class="bi bi-play-circle me-1"></i> Mulai Simulasi
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

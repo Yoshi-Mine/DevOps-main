@@ -1,0 +1,228 @@
+/* === RESET & FONT === */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f2f7ff;
+    font-family: "Inter", "Poppins", sans-serif;
+    overflow-x: hidden;
+}
+
+/* * {
+  border: 1px solid black;
+} */
+
+
+/* Navbar Custom */
+.navbar-custom {
+    background-color: #3b82f6 !important;
+    color: white !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Brand (Logo Text) */
+.navbar-brand {
+    color: white !important;
+    font-weight: 600;
+    font-size: 1.4em;
+    letter-spacing: 0.5px;
+}
+
+/* Nav Links */
+.navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 500;
+    margin: 0 15px;
+    transition: opacity 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    opacity: 0.8;
+}
+
+/* Tombol Login (sama seperti tombol Download) */
+.btn-login {
+    border: 6px solid white;
+    border-radius: 50px;
+    padding: 8px 20px;
+    background: transparent;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-login:hover {
+    background-color: white;
+    color: #4179c6;
+}
+
+/* Responsif */
+@media (max-width: 992px) {
+    .navbar-custom {
+        padding: 15px 30px;
+    }
+
+    .navbar-nav .nav-link {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .btn-login {
+        margin-top: 10px;
+    }
+}
+
+
+
+
+/* === HERO LENGKUNG === */
+.hero {
+    background-color: #3b82f6;
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    margin-top: 0;
+    border-top: none;
+}
+
+/* === CARD (MATA PELAJARAN) === */
+.card,
+.subject-card {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.card:hover,
+.subject-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card img,
+.subject-card img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
+
+h5 {
+    font-weight: 600;
+}
+
+p {
+    color: #555;
+    font-size: 15px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 30px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
+
+
+
+
+/* === BACKGROUND HALAMAN SIMULASI === */
+.bg-pattern {
+    background-color: #3b82f6;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* === FORM SIMULASI CARD === */
+.form-box {
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 40px 35px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* === ICON CIRCLE === */
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 20px auto;
+}
+
+/* === TITLE & TEXT === */
+.form-box h4 {
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #111827;
+}
+
+.form-box p {
+    color: #6b7280;
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+/* === LABEL DAN SELECT === */
+.form-box label {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+.form-select {
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    transition: border 0.2s;
+}
+
+.form-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* === BUTTON MULAI SIMULASI === */
+.btn-simulasi {
+    width: 100%;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-simulasi:hover {
+    background-color: #2563eb;
+}
+

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Round 1 | Quiz</title>
+  <link rel="stylesheet" href="../css/question.css" />
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader"></div>
+  </div>
+
+  <header>Welcome!</header>
+
+  <div class="quiz-container">
+    <div id="timer" class="hidden">
+      Time Left: <span id="time-remaining"></span>
+    </div>
+
+    <button id="start-timer-btn" onclick="startTimer()">Start Timer</button>
+
+    <div class="question-section hidden">
+      <h3 id="question-text">Loading...</h3>
+      <ul class="options" id="options-list"></ul>
+    </div>
+
+    <div id="feedback" class="hidden"></div>
+    <div id="explanation" class="hidden"></div>
+
+    <button id="back-btn" class="hidden" onclick="loadPreviousQuestion()">Back</button>
+    <button id="next-btn" class="hidden" onclick="loadNextQuestion()">Next</button>
+  </div>
+
+  <script>
+    let questions = [];
+
+    // Fetch questions from backend API
+    async function loadQuestions() {
+      try {
+        const res = await fetch("http://localhost:3000/api/questions");
+        if (!res.ok) throw new Error("Failed to fetch questions");
+        const data = await res.json();
+        questions = data.data; // make sure your backend sends { data: [...] }
+
+        console.log("✅ Questions loaded:", questions);
+
+        // Start button is visible, but hide loader now
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".question-section").classList.add("hidden");
+      } catch (err) {
+        console.error("❌ Error loading questions:", err);
+        document.getElementById("question-text").innerHTML =
+          "Failed to load questions. Please check the server connection.";
+      }
+    }
+
+    loadQuestions();
+  </script>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Manajemen Soal Quizy</title>
+    <style>
+        /* CSS Sederhana untuk Admin Panel */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: #444; }
+        
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        textarea { height: 80px; resize: vertical; }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        button.btn-submit { background-color: #28a745; color: white; border: none; padding: 12px 20px; cursor: pointer; width: 100%; font-size: 16px; border-radius: 4px; margin-top: 10px; transition: 0.3s; }
+        button.btn-submit:hover { background-color: #218838; }
+        button.btn-cancel { background-color: #6c757d; display: none; margin-top: 5px; } 
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        
+        .actions { white-space: nowrap; }
+        .btn-edit, .btn-delete { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px; font-size: 14px; }
+        .btn-edit { background-color: #ffc107; color: #333; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        
+        .loading { text-align: center; margin-top: 20px; font-style: italic; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>⚙️ Panel Admin Quizy</h1>
+    
+    <div class="card">
+        <h2 id="form-title">Tambah Soal Baru</h2>
+        <form id="questionForm">
+            <input type="hidden" id="questionId"> <div class="form-group">
+                <label>Pertanyaan:</label>
+                <textarea id="questionText" required placeholder="Tulis soal di sini..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Opsi Jawaban:</label>
+                <div class="options-grid">
+                    <input type="text" id="optA" placeholder="Opsi A" required>
+                    <input type="text" id="optB" placeholder="Opsi B" required>
+                    <input type="text" id="optC" placeholder="Opsi C" required>
+                    <input type="text" id="optD" placeholder="Opsi D" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Jawaban Benar:</label>
+                <select id="correctOption" required>
+                    <option value="" disabled selected>Pilih Jawaban Benar</option>
+                    <option value="0">Opsi A</option>
+                    <option value="1">Opsi B</option>
+                    <option value="2">Opsi C</option>
+                    <option value="3">Opsi D</option>
+                </select>
+                <small style="color: #666;">*Sistem akan menyimpan teks dari opsi yang dipilih.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Penjelasan (muncul setelah menjawab):</label>
+                <textarea id="explanation" placeholder="Penjelasan jawaban..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Simpan Soal</button>
+            <button type="button" class="btn-submit btn-cancel" id="cancelBtn" onclick="resetForm()">Batal Edit</button>
+        </form>
+    </div>
+
+    <h2>Daftar Soal Database</h2>
+    <div id="loading" class="loading">Memuat data...</div>
+    <table id="questionsTable">
+        <thead>
+            <tr>
+                <th style="width: 5%;">No</th>
+                <th style="width: 40%;">Pertanyaan</th>
+                <th style="width: 20%;">Jawaban Benar</th>
+                <th style="width: 15%;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // Konfigurasi URL Backend (Sesuaikan jika port berbeda)
+    // Berdasarkan server.js Anda, port default adalah 3000
+    const API_URL = 'http://localhost:3000/api/questions';
+
+    // === 1. READ (Ambil Data) ===
+    async function fetchQuestions() {
+        try {
+            const response = await fetch(API_URL);
+            const result = await response.json();
+            
+            // Backend Anda mengembalikan format { data: [...] } di routes/questionRoutes.js
+            const questions = result.data || []; 
+            
+            renderTable(questions);
+        } catch (error) {
+            console.error('Error fetching questions:', error);
+            document.getElementById('loading').innerText = 'Gagal memuat data. Pastikan server backend menyala.';
+        }
+    }
+
+    function renderTable(questions) {
+        const tbody = document.querySelector('#questionsTable tbody');
+        const loading = document.getElementById('loading');
+        tbody.innerHTML = '';
+        loading.style.display = 'none';
+
+        questions.forEach((q, index) => {
+            const row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${q.question.substring(0, 80)}${q.question.length > 80 ? '...' : ''}</td>
+                    <td style="color: green; font-weight: bold;">${q.correct}</td>
+                    <td class="actions">
+                        <button class="btn-edit" onclick='editQuestion(${JSON.stringify(q)})'>Edit</button>
+                        <button class="btn-delete" onclick="deleteQuestion('${q._id}')">Hapus</button>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+    }
+
+    // === 2. CREATE & UPDATE (Simpan Data) ===
+    document.getElementById('questionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Ambil value dari form
+        const id = document.getElementById('questionId').value;
+        const questionText = document.getElementById('questionText').value;
+        const optA = document.getElementById('optA').value;
+        const optB = document.getElementById('optB').value;
+        const optC = document.getElementById('optC').value;
+        const optD = document.getElementById('optD').value;
+        const correctIndex = document.getElementById('correctOption').value;
+        const explanation = document.getElementById('explanation').value;
+
+        // Validasi
+        const optionsArray = [optA, optB, optC, optD];
+        const correctValue = optionsArray[correctIndex]; // Ambil teks jawaban berdasarkan index yg dipilih
+
+        const payload = {
+            question: questionText,
+            options: optionsArray,
+            correct: correctValue,
+            explanation: explanation
+        };
+
+        try {
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/${id}` : API_URL;
+
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert(id ? 'Soal berhasil diperbarui!' : 'Soal berhasil ditambahkan!');
+                resetForm();
+                fetchQuestions(); // Refresh tabel
+            } else {
+                alert('Gagal menyimpan soal.');
+            }
+        } catch (error) {
+            console.error('Error saving:', error);
+            alert('Terjadi kesalahan koneksi.');
+        }
+    });
+
+    // === 3. DELETE (Hapus Data) ===
+    async function deleteQuestion(id) {
+        if (!confirm('Yakin ingin menghapus soal ini?')) return;
+
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                fetchQuestions(); // Refresh tabel
+            } else {
+                alert('Gagal menghapus soal.');
+            }
+        } catch (error) {
+            console.error('Error deleting:', error);
+        }
+    }
+
+    // === 4. Helper Functions ===
+    function editQuestion(q) {
+        // Isi form dengan data yang ada
+        document.getElementById('questionId').value = q._id;
+        document.getElementById('questionText').value = q.question;
+        document.getElementById('optA').value = q.options[0];
+        document.getElementById('optB').value = q.options[1];
+        document.getElementById('optC').value = q.options[2];
+        document.getElementById('optD').value = q.options[3];
+        document.getElementById('explanation').value = q.explanation;
+
+        // Cari index opsi mana yang cocok dengan jawaban benar (string matching)
+        const correctIdx = q.options.indexOf(q.correct);
+        if (correctIdx !== -1) {
+            document.getElementById('correctOption').value = correctIdx;
+        }
+
+        // Ubah tampilan tombol
+        document.getElementById('form-title').innerText = 'Edit Soal';
+        document.getElementById('submitBtn').innerText = 'Update Soal';
+        document.getElementById('submitBtn').style.backgroundColor = '#ffc107';
+        document.getElementById('submitBtn').style.color = '#000';
+        document.getElementById('cancelBtn').style.display = 'inline-block';
+        
+        // Scroll ke atas
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        document.getElementById('questionForm').reset();
+        document.getElementById('questionId').value = '';
+        
+        document.getElementById('form-title').innerText = 'Tambah Soal Baru';
+        document.getElementById('submitBtn').innerText = 'Simpan Soal';
+        document.getElementById('submitBtn').style.backgroundColor = '#28a745';
+        document.getElementById('submitBtn').style.color = '#fff';
+        document.getElementById('cancelBtn').style.display = 'none';
+    }
+
+    // Load data saat halaman dibuka
+    window.onload = fetchQuestions;
+</script>
+
+</body>
+</html>
